@@ -20,10 +20,19 @@ def files_callback(ctx, param, value):
 
 
 @click.command()
+@click.option("--jobs", "-n", type=int, default=0, help="Split the task into (max.) n parallel jobs.")
 @click.option("--verbose", "-v", is_flag=True, help="Add verbosity to ouput.")
 @click.option("--version", is_flag=True, help="Print current Larix version and exit.")
 @click.argument("files", nargs=-1, type=click.Path(exists=True), autocompletion=listfiles("."), callback=files_callback)
-def main(verbose, version, files):
+def main(n, verbose, version, files):
+    """
+    Larix constructs a file dependency network from input files.
+    This is especially interesting when working on large projects.
+
+    Basic usage only requires one input file, i.e., the `main`, since all the dependencies will be detected.
+
+    Inputs files can also be piped, e.g. `echo "app.py" | larix`.
+    """
     click.echo("main")
     if version:
         click.echo(VERSION)
